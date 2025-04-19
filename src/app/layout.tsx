@@ -4,6 +4,7 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/layout/Footer'
 import { ThemeProvider } from '@/components/layout/ThemeProvider'
+import ThemeToggle from '@/components/layout/ThemeToggle'
 import Link from 'next/link'
 
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit' })
@@ -59,6 +60,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <ThemeToggle />
         </ThemeProvider>
       </body>
     </html>

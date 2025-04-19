@@ -50,10 +50,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     // Get stored theme from localStorage
     const storedTheme = localStorage.getItem('theme') as Theme | null;
     
-    // If stored theme exists and is valid, use it
-    if (storedTheme && (storedTheme === 'portfolio' || storedTheme === 'kawaii')) {
-      setTheme(storedTheme);
-    }
+    // Use default theme (portfolio) even if there's a stored theme
+    // This ensures portfolio theme is always the default when the site loads
+    setTheme('portfolio');
     
     setMounted(true);
   }, []);
