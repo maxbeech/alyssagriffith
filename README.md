@@ -1,80 +1,92 @@
-# Grafton Tennis and Squash Club Website
+# Alyssa Griffith - Theme-Switching Portfolio
 
-A modern, responsive website for Grafton Tennis and Squash Club, established in 1888.
+A dynamic portfolio website for Alyssa Griffith featuring a theme-switching Hero component that seamlessly transitions between a professional portfolio theme and a kawaii theme.
 
 ## Features
 
-- Modern, responsive design optimized for all devices
-- SEO-friendly structure
-- Information about tennis and squash facilities
-- Coaching program details
-- Membership information
-- Club news and events
-- Contact information
+- **Dual Theme Design**: Switch between a professional "Portfolio" theme and a playful "Kawaii" theme with a smooth transition.
+- **Responsive Hero Component**: A fully responsive hero section that adapts to different screen sizes.
+- **Dynamic Content**: Content, styles, and animations automatically update based on the selected theme.
+- **Persistent Theme Preference**: User's theme preference is stored in localStorage for a consistent experience across visits.
+- **Video Backgrounds**: Theme-specific video backgrounds with poster image fallbacks.
+- **Animated UI Elements**: Smooth animations for transitions, hover effects, and theme toggle.
 
-## Technologies Used
+## Components
 
-- Next.js - React framework
-- TypeScript - Type safety
-- Tailwind CSS - Styling
-- Vercel - Hosting and deployment
+### ThemeProvider
 
-## Getting Started
+The `ThemeProvider` component manages the theme state and provides context for theme-dependent components:
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+- **Context API**: Uses React Context to provide theme-related values and functions to child components.
+- **Theme Persistence**: Saves the user's theme preference to localStorage.
+- **Theme Classes**: Adds theme-specific CSS classes to the document for global styling.
 
-## Image Handling
-
-The website uses Next.js Image Optimization for efficient image loading and delivery:
-
-### Local Images
-
-Images are stored in the `/public/images` directory. These images are:
-- Automatically optimized by Next.js
-- Served with proper formats and sizes based on the client device
-- Lazy-loaded for better performance
-
-### Adding New Images
-
-To add new images to the website:
-
-1. Place image files in the `/public/images` directory
-2. Reference them in components using the path `/images/your-image.jpg`
-3. Use the Next.js Image component for optimal delivery:
-
+Usage:
 ```jsx
-import Image from 'next/image';
+import { ThemeProvider } from '@/components/layout/ThemeProvider';
 
-<Image 
-  src="/images/example.jpg" 
-  alt="Description" 
-  width={800} 
-  height={600} 
-  className="object-cover" 
-/>
+function App() {
+  return (
+    <ThemeProvider defaultTheme="portfolio">
+      {/* Your components */}
+    </ThemeProvider>
+  );
+}
 ```
 
-### Admin Interface
+### Hero Component
 
-For content managers, we've created a simple admin interface at `/admin` that demonstrates how images can be uploaded and managed. In a production environment, this would be expanded with authentication and more robust image management capabilities.
+The `Hero` component is a feature-rich, responsive hero section with theme-specific styles and content:
 
-## Deployment
+- **Dynamic Content**: Headings, subheadings, descriptions, and CTAs change based on the theme.
+- **Video Background**: Theme-specific video backgrounds with fallback poster images.
+- **Animated Elements**: Text animations and floating emotes (in Kawaii theme).
+- **Theme Toggle**: Built-in button to switch between themes.
 
-The website is deployed to Vercel for optimal performance:
+Usage:
+```jsx
+import Hero from '@/components/Hero';
 
-1. Push changes to the GitHub repository
-2. Vercel automatically builds and deploys the site
-3. Visit the live site at [https://grafton-tennis-squash.vercel.app](https://grafton-tennis-squash.vercel.app)
+function HomePage() {
+  return (
+    <main>
+      <Hero />
+      {/* Other content */}
+    </main>
+  );
+}
+```
+
+## Theme-Specific Styling
+
+The application uses CSS variables to define theme-specific colors and styles:
+
+- **Portfolio Theme**: Professional, sophisticated design with violet/slate color scheme.
+- **Kawaii Theme**: Playful, cute design with pink/purple color scheme.
+
+Global theme-specific styles are defined in `globals.css` and applied through theme classes.
+
+## Development
+
+This project uses:
+
+- **Next.js**: React framework for server-rendered applications.
+- **Tailwind CSS**: Utility-first CSS framework for styling.
+- **Framer Motion**: Animation library for React.
+- **TypeScript**: Typed JavaScript for better developer experience.
+
+### Running Locally
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view the site in your browser.
 
 ## License
 
-All rights reserved. This site was created for Grafton Tennis and Squash Club. 
+All rights reserved. The code and design in this project are proprietary and confidential. 

@@ -15,6 +15,37 @@
   --accent-dark: #f59e0b; /* amber-500 */
 }
 
+/* Theme Variables */
+.theme-portfolio {
+  /* Portfolio theme - sophisticated, professional */
+  --theme-primary: #8b5cf6;        /* violet-500 */
+  --theme-primary-light: #a78bfa;  /* violet-400 */
+  --theme-primary-dark: #7c3aed;   /* violet-600 */
+  --theme-secondary: #1e293b;      /* slate-800 */
+  --theme-accent: #ffffff;         /* white */
+  --theme-text: #f8fafc;           /* slate-50 */
+  --theme-text-muted: #cbd5e1;     /* slate-300 */
+  --theme-background: #0f172a;     /* slate-900 */
+  --theme-card: rgba(30, 41, 59, 0.7); /* slate-800 with opacity */
+  --theme-border: rgba(148, 163, 184, 0.2); /* slate-400 with opacity */
+  --theme-shadow: rgba(139, 92, 246, 0.2); /* violet-500 with opacity */
+}
+
+.theme-kawaii {
+  /* Kawaii theme - cute, colorful, energetic */
+  --theme-primary: #ec4899;        /* pink-500 */
+  --theme-primary-light: #f472b6;  /* pink-400 */
+  --theme-primary-dark: #db2777;   /* pink-600 */
+  --theme-secondary: #c084fc;      /* purple-400 */
+  --theme-accent: #fbcfe8;         /* pink-200 */
+  --theme-text: #ffffff;           /* white */
+  --theme-text-muted: #f9a8d4;     /* pink-300 */
+  --theme-background: #ffe6f2;     /* custom light pink */
+  --theme-card: rgba(249, 168, 212, 0.2); /* pink-300 with opacity */
+  --theme-border: rgba(249, 168, 212, 0.5); /* pink-300 with opacity */
+  --theme-shadow: rgba(236, 72, 153, 0.3); /* pink-500 with opacity */
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
@@ -35,10 +66,36 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+/* Theme-specific body styles */
+.theme-portfolio body {
+  font-family: var(--font-outfit), sans-serif;
+  background-color: var(--theme-background);
+  color: var(--theme-text);
+}
+
+.theme-kawaii body {
+  font-family: var(--font-quicksand), sans-serif;
+  background-color: var(--theme-background);
+  color: var(--theme-text);
+}
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-poppins), sans-serif;
   @apply font-semibold tracking-tight;
+}
+
+/* Theme-specific typography */
+.theme-portfolio h1, .theme-portfolio h2, .theme-portfolio h3, 
+.theme-portfolio h4, .theme-portfolio h5, .theme-portfolio h6 {
+  font-family: var(--font-outfit), sans-serif;
+  @apply font-bold tracking-tight;
+}
+
+.theme-kawaii h1, .theme-kawaii h2, .theme-kawaii h3, 
+.theme-kawaii h4, .theme-kawaii h5, .theme-kawaii h6 {
+  font-family: var(--font-quicksand), sans-serif;
+  @apply font-bold tracking-tight;
 }
 
 /* Custom Scrollbar */
@@ -149,6 +206,23 @@ html {
 
 .btn-white {
   @apply inline-flex items-center px-6 py-3 border border-white text-base font-medium rounded-md text-white hover:bg-white/10 backdrop-blur-sm transition-colors;
+}
+
+/* Theme-specific buttons */
+.theme-portfolio .btn-primary {
+  @apply bg-violet-600 hover:bg-violet-700 text-white;
+}
+
+.theme-portfolio .btn-secondary {
+  @apply border border-white text-white hover:bg-white/10;
+}
+
+.theme-kawaii .btn-primary {
+  @apply bg-pink-400 hover:bg-pink-500 text-white;
+}
+
+.theme-kawaii .btn-secondary {
+  @apply border border-pink-300 text-pink-100 hover:bg-pink-400/20;
 }
 
 /* Card Hover Effects */
@@ -288,6 +362,28 @@ html {
   .section-subtitle {
     @apply text-lg text-gray-600 mb-12 max-w-3xl mx-auto;
   }
+}
+
+/* Theme-specific cards */
+.theme-portfolio .card {
+  background-color: var(--theme-card);
+  border: 1px solid var(--theme-border);
+  @apply shadow-lg shadow-violet-500/10;
+}
+
+.theme-kawaii .card {
+  background-color: var(--theme-card);
+  border: 1px solid var(--theme-border);
+  @apply shadow-lg shadow-pink-500/20 rounded-2xl;
+}
+
+/* Theme-specific links */
+.theme-portfolio .link {
+  @apply text-violet-400 hover:text-violet-300 transition-colors;
+}
+
+.theme-kawaii .link {
+  @apply text-pink-500 hover:text-pink-400 transition-colors;
 }
 
 /* Animation classes */
