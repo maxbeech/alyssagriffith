@@ -83,11 +83,11 @@ const SocialMediaMosaic = () => {
   const { theme } = useTheme();
   const images = [
     "/media/social_post_examples_images/449693276_405464155841619_4890705047996127555_n.jpg",
-    "/media/social_post_examples_images/451054069_930525998766432_8420761959308580563_n.jpg",
-    "/media/social_post_examples_images/454259564_1083318636205001_9211354481593696311_n.jpg",
-    "/media/social_post_examples_images/448485172_1089729965450196_1766185261358962474_n.jpg",
     "/media/social_post_examples_images/413480406_268180242641239_910633806196981689_n.jpg",
-    "/media/social_post_examples_images/414071636_877656817460797_8060586933150239830_n.jpg",
+    "/media/social_post_examples_images/447485124_814782830599928_8633044856097844168_n.jpg",
+    "/media/social_post_examples_images/458284710_942743081204758_4893526817077071318_n.jpg",
+    "/media/social_post_examples_images/460439528_1567662157166822_1758686213985836233_n.jpg",
+    "/media/social_post_examples_images/455245604_533683559091476_8697780699626447442_n.jpg",
   ];
 
   return (
@@ -181,12 +181,17 @@ const FloatingHeadshotGallery = () => {
   const headshots = [
     "/media/headshots/445887761_796726439208008_3385061216813286601_n.jpg",
     "/media/headshots/456384227_4730507360506675_4659362246313189324_n.jpg",
-    "/media/headshots/458042825_914504783786613_4060333813556286485_n.jpg",
+    "/media/headshots/456322981_1964378130671405_7252420836716404818_n.jpg",
+    "/media/social_post_examples_images/449693276_405464155841619_4890705047996127555_n.jpg",
+    "/media/social_post_examples_images/413480406_268180242641239_910633806196981689_n.jpg",
+    "/media/social_post_examples_images/447485124_814782830599928_8633044856097844168_n.jpg",
+    "/media/social_post_examples_images/458284710_942743081204758_4893526817077071318_n.jpg",
+    "/media/social_post_examples_images/460439528_1567662157166822_1758686213985836233_n.jpg",
   ];
 
   return (
-    <section className="py-24 relative overflow-hidden">
-      <div className="max-w-6xl mx-auto px-6">
+    <section className="py-24 relative overflow-hidden bg-black">
+      <div className="max-w-7xl mx-auto px-6">
         <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
@@ -212,75 +217,109 @@ const FloatingHeadshotGallery = () => {
           </p>
         </motion.div>
         
-        <div className="relative h-[500px] md:h-[600px]">
+        <div className="relative h-[650px] md:h-[750px]">
           {/* Floating images */}
-          {headshots.map((img, index) => (
-            <motion.div
-              key={index}
-              className={`absolute w-48 md:w-64 aspect-square rounded-lg overflow-hidden ${
-                theme === 'kawaii' 
-                  ? 'border-4 border-pink-300 shadow-xl shadow-pink-400/30' 
-                  : 'border border-gray-200 shadow-xl'
-              }`}
-              initial={{ 
-                x: index % 2 === 0 ? -100 : 100, 
-                y: 100 * (index - 1),
-                opacity: 0 
-              }}
-              whileInView={{ 
-                x: [
-                  index === 0 ? '10%' : index === 1 ? '60%' : '30%',
-                  index === 0 ? '15%' : index === 1 ? '65%' : '25%',
-                  index === 0 ? '5%' : index === 1 ? '55%' : '35%',
-                ],
-                y: [
-                  index === 0 ? '20%' : index === 1 ? '60%' : '30%',
-                  index === 0 ? '25%' : index === 1 ? '65%' : '25%',
-                  index === 0 ? '15%' : index === 1 ? '55%' : '35%',
-                ],
-                opacity: 1,
-                rotate: [
-                  theme === 'kawaii' ? (index - 1) * 5 : 0,
-                  theme === 'kawaii' ? (index - 1) * 2 : 0,
-                  theme === 'kawaii' ? (index - 1) * 8 : 0,
-                ]
-              }}
-              transition={{ 
-                duration: 20,
-                repeat: Infinity,
-                repeatType: "mirror",
-                ease: "easeInOut",
-                delay: index * 2
-              }}
-              viewport={{ once: true }}
-              whileHover={{ 
-                scale: 1.1,
-                zIndex: 10,
-                boxShadow: theme === 'kawaii' 
-                  ? '0 25px 50px -12px rgba(240, 171, 252, 0.5)' 
-                  : '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
-              }}
-            >
-              <Image
-                src={img}
-                alt={`Headshot ${index + 1}`}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 192px, 256px"
-              />
-              
-              {theme === 'kawaii' && (
-                <div className="absolute -top-2 -right-2 bg-pink-400 text-white text-xs px-2 py-1 rounded-full transform rotate-12 font-medium shadow-md">
-                  {index === 0 ? '✨ Cute!' : index === 1 ? '💕 Kawaii!' : '🌸 Love it!'}
-                </div>
-              )}
-            </motion.div>
-          ))}
+          {headshots.map((img, index) => {
+            // Completely distributed positions with no overlap
+            const positions = [
+              { x: '5%', y: '10%' },     // Top left
+              { x: '65%', y: '5%' },     // Top right
+              { x: '35%', y: '30%' },    // Upper middle
+              { x: '85%', y: '35%' },    // Middle right
+              { x: '12%', y: '50%' },    // Middle left
+              { x: '55%', y: '65%' },    // Lower middle right
+              { x: '28%', y: '75%' },    // Lower middle left
+              { x: '80%', y: '70%' },    // Bottom right
+            ];
+            
+            // Get position for this image
+            const position = positions[index];
+            const zIndex = [3, 2, 4, 1, 3, 2, 4, 1][index]; // More controlled z-index
+            
+            // Slightly varied sizes for visual interest
+            const sizes = [
+              { w: 'w-40 md:w-48' },
+              { w: 'w-42 md:w-50' },
+              { w: 'w-44 md:w-52' },
+              { w: 'w-40 md:w-48' },
+              { w: 'w-42 md:w-50' },
+              { w: 'w-44 md:w-52' },
+              { w: 'w-40 md:w-48' },
+              { w: 'w-42 md:w-50' },
+            ];
+            
+            return (
+              <motion.div
+                key={index}
+                className={`absolute ${sizes[index].w} aspect-square rounded-lg overflow-hidden ${
+                  theme === 'kawaii' 
+                    ? 'border-4 border-pink-300 shadow-xl shadow-pink-400/30' 
+                    : 'border border-gray-200 shadow-xl'
+                }`}
+                style={{
+                  zIndex: zIndex
+                }}
+                initial={{ 
+                  x: index % 2 === 0 ? -100 : 100, 
+                  y: 100 * (index - 1),
+                  opacity: 0 
+                }}
+                whileInView={{ 
+                  x: [
+                    position.x,
+                    `calc(${position.x} + 1%)`,
+                    `calc(${position.x} - 1%)`,
+                  ],
+                  y: [
+                    position.y,
+                    `calc(${position.y} + 1%)`,
+                    `calc(${position.y} - 1%)`,
+                  ],
+                  opacity: 1,
+                  rotate: [
+                    theme === 'kawaii' ? (index - 1) * 2 : 0,
+                    theme === 'kawaii' ? (index - 1) * 0.5 : 0,
+                    theme === 'kawaii' ? (index - 1) * 3 : 0,
+                  ]
+                }}
+                transition={{ 
+                  duration: 20,
+                  repeat: Infinity,
+                  repeatType: "mirror",
+                  ease: "easeInOut",
+                  delay: 0.1, // Faster initial appearance
+                  opacity: { duration: 0.3 } // Faster fade in
+                }}
+                viewport={{ once: true }}
+                whileHover={{ 
+                  scale: 1.1,
+                  zIndex: 50,
+                  boxShadow: theme === 'kawaii' 
+                    ? '0 25px 50px -12px rgba(240, 171, 252, 0.5)' 
+                    : '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+                }}
+              >
+                <Image
+                  src={img}
+                  alt={`Portfolio image ${index + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 176px, 208px"
+                />
+                
+                {theme === 'kawaii' && (
+                  <div className="absolute -top-2 -right-2 bg-pink-400 text-white text-xs px-2 py-1 rounded-full transform rotate-12 font-medium shadow-md">
+                    {['✨ Cute!', '💕 Kawaii!', '🌸 Love it!', '😍 Amazing!', '🔥 Hot!', '💫 Wow!', '✌️ Cool!', '💝 Perfect!'][index]}
+                  </div>
+                )}
+              </motion.div>
+            );
+          })}
           
           {/* Decorative elements for kawaii mode */}
           {theme === 'kawaii' && (
             <>
-              {[...Array(5)].map((_, i) => (
+              {[...Array(8)].map((_, i) => (
                 <motion.div
                   key={`star-${i}`}
                   className="absolute text-3xl"
@@ -305,6 +344,21 @@ const FloatingHeadshotGallery = () => {
               ))}
             </>
           )}
+        </div>
+        
+        <div className="text-center mt-10">
+          <motion.a
+            href="/portfolio"
+            className={`inline-block px-6 py-3 rounded-full text-lg font-medium ${
+              theme === 'kawaii' 
+                ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/30 hover:bg-pink-600' 
+                : 'bg-violet-700 text-white hover:bg-violet-800'
+            }`}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            {theme === 'kawaii' ? '✨ See Full Portfolio ✨' : 'View Full Portfolio'}
+          </motion.a>
         </div>
       </div>
     </section>

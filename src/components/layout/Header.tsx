@@ -101,8 +101,8 @@ export default function Header() {
             {/* Logo */}
             <Link href="/" className="flex items-center">
               <Image
-                src="/media/logo.png"
-                alt="Bookham Kitchens Logo"
+                src="/media/logo-icon_and_text.png"
+                alt="Alyssa Griffith Logo"
                 width={180}
                 height={50}
                 className="h-auto"
