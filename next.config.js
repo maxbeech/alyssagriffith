@@ -16,7 +16,7 @@ const nextConfig = {
         hostname: 'images.pexels.com',
       },
     ],
-    unoptimized: false, // Use Next.js image optimization for better performance
+    unoptimized: true, // Disable Next.js image optimization to fix loading issues
   },
   // Configure webpack to handle video files
   webpack: (config) => {

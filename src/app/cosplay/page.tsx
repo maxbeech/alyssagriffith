@@ -168,14 +168,14 @@ const FeaturedCosplay = () => {
                 </div>
                 
                 <Link 
-                  href={`/portfolio/cosplay`} 
-                  className={`inline-block px-6 py-3 rounded-full font-medium transition-all ${
-                    theme === 'kawaii'
-                      ? 'bg-pink-500 text-white hover:bg-pink-600 shadow-lg shadow-pink-200 hover:scale-105'
-                      : 'bg-violet-600 text-white hover:bg-violet-700 hover:scale-105'
+                  href="/cosplay" 
+                  className={`mt-6 inline-block px-6 py-3 rounded-full text-center transition-all ${
+                    theme === 'kawaii' 
+                      ? 'bg-pink-500 text-white hover:bg-pink-600 shadow-md hover:shadow-lg' 
+                      : 'bg-violet-600 text-white hover:bg-violet-700'
                   }`}
                 >
-                  {theme === 'kawaii' ? '🎀 View All Cosplays 🎀' : 'View All Cosplays'}
+                  View All Cosplays
                 </Link>
               </motion.div>
             </AnimatePresence>
@@ -425,185 +425,31 @@ const CosplayTips = () => {
                 {tip.icon}
               </div>
               
-              <h3 className={`text-xl font-bold mb-3 ${
-                theme === 'kawaii' ? 'text-pink-700' : 'text-gray-900'
+              <h3 className={`text-lg font-bold mb-2 ${
+                theme === 'kawaii' ? 'text-pink-600' : 'text-violet-700'
               }`}>
                 {tip.title}
               </h3>
               
-              <p className={theme === 'kawaii' ? 'text-pink-800' : 'text-gray-700'}>
+              <p className={`${
+                theme === 'kawaii' ? 'text-pink-700' : 'text-gray-600'
+              }`}>
                 {tip.description}
               </p>
             </motion.div>
           ))}
         </div>
-        
-        <div className="mt-12 text-center">
-          <Link
-            href="/blog?category=cosplay-diy"
-            className={`inline-block px-6 py-3 rounded-full font-medium transition-all ${
-              theme === 'kawaii'
-                ? 'bg-pink-500 text-white hover:bg-pink-600 shadow-lg shadow-pink-200 hover:scale-105'
-                : 'bg-violet-600 text-white hover:bg-violet-700 hover:scale-105'
-            }`}
-          >
-            {theme === 'kawaii' ? '✨ Read My Cosplay Guides ✨' : 'Read My Cosplay Guides'}
-          </Link>
-        </div>
       </div>
     </section>
   );
 };
 
-// Interactive elements section
-const InteractiveSection = () => {
-  const { theme } = useTheme();
-  const [emoteCount, setEmoteCount] = useState<{[key: string]: number}>({
-    '❤️': 0,
-    '🎀': 0,
-    '✨': 0,
-    '🌸': 0,
-  });
-  
-  // Only show this section in Kawaii theme
-  if (theme !== 'kawaii') return null;
-  
-  const handleEmoteClick = (emote: string) => {
-    setEmoteCount(prev => ({
-      ...prev,
-      [emote]: prev[emote] + 1
-    }));
-    
-    // Add floating animation for the clicked emote
-    const container = document.getElementById('emote-container');
-    if (container) {
-      const emoteEl = document.createElement('div');
-      emoteEl.innerText = emote;
-      emoteEl.className = 'absolute text-2xl pointer-events-none';
-      emoteEl.style.left = `${Math.random() * 80 + 10}%`;
-      emoteEl.style.bottom = '0';
-      emoteEl.style.animation = 'float 2s ease-out forwards';
-      container.appendChild(emoteEl);
-      
-      setTimeout(() => {
-        container.removeChild(emoteEl);
-      }, 2000);
-    }
-  };
-  
+export default function CosplayPage() {
   return (
-    <section className="py-16 bg-gradient-to-r from-pink-200 via-pink-100 to-purple-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold mb-6 text-center text-pink-600">
-          ✨ Kawaii Cosplay Zone ✨
-        </h2>
-        
-        <p className="text-center max-w-3xl mx-auto mb-12 text-pink-700">
-          Show your support by clicking the emotes below! Let me know which cosplays you love the most!
-        </p>
-        
-        <div className="relative h-40 mb-8" id="emote-container">
-          {/* Floating emotes will be added here dynamically */}
-        </div>
-        
-        <div className="flex justify-center space-x-6">
-          {Object.keys(emoteCount).map((emote) => (
-            <motion.button
-              key={emote}
-              className="flex flex-col items-center"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => handleEmoteClick(emote)}
-            >
-              <span className="text-4xl mb-2">{emote}</span>
-              <span className="bg-white text-pink-600 px-3 py-1 rounded-full text-sm font-medium shadow-md">
-                {emoteCount[emote]}
-              </span>
-            </motion.button>
-          ))}
-        </div>
-        
-        <style jsx global>{`
-          @keyframes float {
-            0% {
-              transform: translateY(0) scale(1);
-              opacity: 1;
-            }
-            100% {
-              transform: translateY(-100px) scale(1.5);
-              opacity: 0;
-            }
-          }
-        `}</style>
-      </div>
-    </section>
-  );
-};
-
-export default function Cosplay() {
-  const { theme } = useTheme();
-  
-  return (
-    <div className={theme === 'kawaii' ? 'bg-pink-50' : 'bg-white'}>
-      {/* Hero Section */}
-      <section className={`relative overflow-hidden pt-32 pb-20 ${
-        theme === 'kawaii' 
-          ? 'bg-gradient-to-r from-pink-400 via-pink-300 to-purple-400' 
-          : 'bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600'
-      }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div
-            className="text-center text-white"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">
-              {theme === 'kawaii' ? '🎀 Kawaii Cosplays 🎀' : 'Cosplay Portfolio'}
-            </h1>
-            <p className="text-xl md:text-2xl max-w-3xl mx-auto opacity-90">
-              {theme === 'kawaii' 
-                ? 'Explore my super cute character transformations and cosplay adventures!' 
-                : 'A showcase of my character designs, costume creations, and cosplay projects'}
-            </p>
-          </motion.div>
-        </div>
-
-        {/* Decorative elements for kawaii theme */}
-        {theme === 'kawaii' && (
-          <>
-            <motion.div 
-              className="absolute -bottom-6 left-10 w-24 h-24 rounded-full bg-pink-200 opacity-70"
-              animate={{ 
-                y: [0, -15, 0],
-                scale: [1, 1.1, 1],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                repeatType: 'reverse',
-              }}
-            />
-            <motion.div 
-              className="absolute top-10 right-10 w-16 h-16 rounded-full bg-purple-300 opacity-70"
-              animate={{ 
-                y: [0, -10, 0],
-                scale: [1, 1.05, 1],
-              }}
-              transition={{
-                duration: 2.5,
-                repeat: Infinity,
-                repeatType: 'reverse',
-              }}
-            />
-          </>
-        )}
-      </section>
-      
+    <div>
       <FeaturedCosplay />
       <CharacterMap />
       <CosplayTips />
-      <InteractiveSection />
     </div>
   );
-} 
+}
