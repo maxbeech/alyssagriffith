@@ -220,32 +220,32 @@ const FloatingHeadshotGallery = () => {
         <div className="relative h-[650px] md:h-[750px]">
           {/* Floating images */}
           {headshots.map((img, index) => {
-            // Completely distributed positions with no overlap
+            // Better distributed positions to avoid overlap
             const positions = [
               { x: '5%', y: '10%' },     // Top left
-              { x: '65%', y: '5%' },     // Top right
-              { x: '35%', y: '30%' },    // Upper middle
-              { x: '85%', y: '35%' },    // Middle right
-              { x: '12%', y: '50%' },    // Middle left
-              { x: '55%', y: '65%' },    // Lower middle right
-              { x: '28%', y: '75%' },    // Lower middle left
-              { x: '80%', y: '70%' },    // Bottom right
+              { x: '70%', y: '5%' },     // Top right
+              { x: '35%', y: '25%' },    // Upper middle
+              { x: '85%', y: '40%' },    // Middle right
+              { x: '15%', y: '55%' },    // Middle left
+              { x: '60%', y: '60%' },    // Lower middle right
+              { x: '25%', y: '80%' },    // Lower middle left
+              { x: '75%', y: '75%' },    // Bottom right
             ];
             
             // Get position for this image
             const position = positions[index];
             const zIndex = [3, 2, 4, 1, 3, 2, 4, 1][index]; // More controlled z-index
             
-            // Slightly varied sizes for visual interest
+            // Varied sizes for different images
             const sizes = [
-              { w: 'w-40 md:w-48' },
-              { w: 'w-42 md:w-50' },
+              { w: 'w-40 md:w-52' },
+              { w: 'w-44 md:w-56' },
+              { w: 'w-36 md:w-48' },
               { w: 'w-44 md:w-52' },
-              { w: 'w-40 md:w-48' },
-              { w: 'w-42 md:w-50' },
-              { w: 'w-44 md:w-52' },
-              { w: 'w-40 md:w-48' },
-              { w: 'w-42 md:w-50' },
+              { w: 'w-40 md:w-50' },
+              { w: 'w-36 md:w-48' },
+              { w: 'w-42 md:w-54' },
+              { w: 'w-38 md:w-50' },
             ];
             
             return (
@@ -257,38 +257,24 @@ const FloatingHeadshotGallery = () => {
                     : 'border border-gray-200 shadow-xl'
                 }`}
                 style={{
-                  zIndex: zIndex
+                  left: position.x,
+                  top: position.y,
+                  zIndex: zIndex,
+                  transform: theme === 'kawaii' ? `rotate(${(index - 3) * 3}deg)` : 'none'
                 }}
                 initial={{ 
-                  x: index % 2 === 0 ? -100 : 100, 
-                  y: 100 * (index - 1),
-                  opacity: 0 
+                  opacity: 0,
+                  x: index % 2 === 0 ? -50 : 50,
+                  y: 50 
                 }}
                 whileInView={{ 
-                  x: [
-                    position.x,
-                    `calc(${position.x} + 1%)`,
-                    `calc(${position.x} - 1%)`,
-                  ],
-                  y: [
-                    position.y,
-                    `calc(${position.y} + 1%)`,
-                    `calc(${position.y} - 1%)`,
-                  ],
                   opacity: 1,
-                  rotate: [
-                    theme === 'kawaii' ? (index - 1) * 2 : 0,
-                    theme === 'kawaii' ? (index - 1) * 0.5 : 0,
-                    theme === 'kawaii' ? (index - 1) * 3 : 0,
-                  ]
+                  x: 0,
+                  y: 0
                 }}
                 transition={{ 
-                  duration: 20,
-                  repeat: Infinity,
-                  repeatType: "mirror",
-                  ease: "easeInOut",
-                  delay: 0.1, // Faster initial appearance
-                  opacity: { duration: 0.3 } // Faster fade in
+                  duration: 0.8,
+                  delay: index * 0.1
                 }}
                 viewport={{ once: true }}
                 whileHover={{ 
@@ -299,19 +285,36 @@ const FloatingHeadshotGallery = () => {
                     : '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
                 }}
               >
-                <Image
-                  src={img}
-                  alt={`Portfolio image ${index + 1}`}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 176px, 208px"
-                />
-                
-                {theme === 'kawaii' && (
-                  <div className="absolute -top-2 -right-2 bg-pink-400 text-white text-xs px-2 py-1 rounded-full transform rotate-12 font-medium shadow-md">
-                    {['✨ Cute!', '💕 Kawaii!', '🌸 Love it!', '😍 Amazing!', '🔥 Hot!', '💫 Wow!', '✌️ Cool!', '💝 Perfect!'][index]}
-                  </div>
-                )}
+                {/* Inner floating animation */}
+                <motion.div 
+                  className="w-full h-full"
+                  animate={{
+                    y: [0, -8, 0, 8, 0],
+                    x: [0, 5, 0, -5, 0],
+                    rotate: theme === 'kawaii' 
+                      ? [(index - 3) * 0.5, (index - 3) * 0.5 + 2, (index - 3) * 0.5, (index - 3) * 0.5 - 2, (index - 3) * 0.5] 
+                      : [0, 1, 0, -1, 0]
+                  }}
+                  transition={{
+                    duration: 10 + index * 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  <Image
+                    src={img}
+                    alt={`Portfolio image ${index + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 176px, 208px"
+                  />
+                  
+                  {theme === 'kawaii' && (
+                    <div className="absolute -top-2 -right-2 bg-pink-400 text-white text-xs px-2 py-1 rounded-full transform rotate-12 font-medium shadow-md">
+                      {['✨ Cute!', '💕 Kawaii!', '🌸 Love it!', '😍 Amazing!', '🔥 Hot!', '💫 Wow!', '✌️ Cool!', '💝 Perfect!'][index]}
+                    </div>
+                  )}
+                </motion.div>
               </motion.div>
             );
           })}
@@ -324,8 +327,8 @@ const FloatingHeadshotGallery = () => {
                   key={`star-${i}`}
                   className="absolute text-3xl"
                   initial={{ 
-                    x: Math.random() * 100 + '%',
-                    y: Math.random() * 100 + '%',
+                    x: `${Math.random() * 100}%`,
+                    y: `${Math.random() * 100}%`,
                     opacity: 0
                   }}
                   animate={{ 
