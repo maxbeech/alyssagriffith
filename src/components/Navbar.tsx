@@ -310,6 +310,37 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex lg:items-center lg:justify-center">
             <div className="flex items-center justify-center space-x-2">
+              {/* Theme toggle button on the left side of navigation row */}
+              <motion.button
+                onClick={toggleTheme}
+                className={`relative px-5 py-2 mr-2 rounded-full overflow-hidden transition-colors shadow-sm
+                  ${theme === 'portfolio' 
+                    ? 'bg-violet-100 border border-violet-200' 
+                    : 'bg-pink-100 border border-pink-200'
+                  }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label="Toggle theme"
+              >
+                <div className="flex items-center space-x-2">
+                  {theme === 'portfolio' ? (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                      <span className="text-xs font-medium text-violet-700">Pro Mode</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                      </svg>
+                      <span className="text-xs font-medium text-pink-600">Kawaii Mode</span>
+                    </>
+                  )}
+                </div>
+              </motion.button>
+
               {navigation.map((item: NavigationItem) => (
                 item.children && item.children.length > 0 ? (
                   <Popover key={item.name} className="relative">
@@ -382,39 +413,6 @@ const Navbar = () => {
               >
                 {theme === 'portfolio' ? 'Work With Me' : 'Subscribe'}
               </Link>
-
-              {/* Theme Toggle Button */}
-              <div className="ml-2">
-                <motion.button
-                  onClick={toggleTheme}
-                  className={`p-2 rounded-full transition-colors ${
-                    theme === 'portfolio' 
-                      ? 'bg-violet-100 text-violet-700 hover:bg-violet-200' 
-                      : 'bg-pink-100 text-pink-600 hover:bg-pink-200'
-                  }`}
-                  variants={toggleVariants}
-                  animate={theme}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  aria-label="Toggle theme"
-                >
-                  <motion.span 
-                    variants={toggleIconVariants}
-                    animate={theme}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {theme === 'portfolio' ? (
-                      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                    ) : (
-                      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                      </svg>
-                    )}
-                  </motion.span>
-                </motion.button>
-              </div>
             </div>
           </div>
         </div>
@@ -477,7 +475,7 @@ const Navbar = () => {
                                 className={`block px-4 py-2 text-base font-medium rounded-md ${
                                   pathname === child.href
                                     ? theme === 'portfolio' ? 'text-violet-700 bg-violet-50' : 'text-pink-600 bg-pink-100'
-                                    : theme === 'portfolio' ? 'text-gray-700 hover:bg-gray-50' : 'text-pink-700 hover:bg-pink-50'
+                                    : theme === 'portfolio' ? 'text-gray-700' : 'text-pink-700'
                                 }`}
                                 onClick={() => setIsMobileMenuOpen(false)}
                               >
