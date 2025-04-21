@@ -3,13 +3,48 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useTheme } from '@/components/layout/ThemeProvider';
 
 const Hero: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  
+  // Mouse tracking for magnetic effect
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  
+  // Smooth spring physics for mouse movement
+  const springConfig = { damping: 25, stiffness: 100 };
+  const springX = useSpring(mouseX, springConfig);
+  const springY = useSpring(mouseY, springConfig);
+  
+  // Transform mouse position into subtle movement values
+  const moveX = useTransform(springX, [-500, 500], [-15, 15]);
+  const moveY = useTransform(springY, [-500, 500], [-15, 15]);
+  const rotateX = useTransform(springY, [-500, 500], [2, -2]);
+  const rotateY = useTransform(springX, [-500, 500], [-2, 2]);
+  
+  // Handle mouse move event
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (sectionRef.current) {
+      const rect = sectionRef.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      // Calculate distance from center
+      mouseX.set(e.clientX - centerX);
+      mouseY.set(e.clientY - centerY);
+    }
+  };
+  
+  // Reset mouse position when mouse leaves section
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
   
   // Update video source when theme changes
   useEffect(() => {
@@ -27,9 +62,8 @@ const Hero: React.FC = () => {
   // Define content based on theme
   const heroContent = {
     portfolio: {
-      heading: "Alyssa Griffith",
+      heading: "ALYSSA GRIFFITH",
       subheading: "Digital Creator & Choreographer",
-      description: "Captivating audiences through seamless blend of dance, visual storytelling, and digital content creation.",
       cta: {
         primary: {
           text: "See My Work",
@@ -49,9 +83,8 @@ const Hero: React.FC = () => {
       posterSrc: "/media/social_post_examples_images/449693276_405464155841619_4890705047996127555_n.jpg"
     },
     kawaii: {
-      heading: "@alyssagriffith ✨",
+      heading: "Alyssa Griffith",
       subheading: "Dancer • Cosplayer • Content Creator",
-      description: "Creating cute and spicy content that brings your favorite characters to life! Join me for dance, cosplay and so much more!",
       cta: {
         primary: {
           text: "Explore Cosplays",
@@ -110,9 +143,12 @@ const Hero: React.FC = () => {
   
   return (
     <motion.section 
-      className="relative h-screen flex items-center justify-center overflow-hidden pt-24 lg:pt-32"
+      ref={sectionRef}
+      className="relative h-screen flex items-end justify-center overflow-hidden pt-24 lg:pt-32 pb-16"
       animate={{ backgroundColor: theme === 'kawaii' ? '#fdf2f8' : '#111827' }}
       transition={themeTransition}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Video Background */}
       <div className={`absolute inset-0 w-full h-full ${!videoLoaded ? 'bg-gray-900' : ''}`}>
@@ -138,8 +174,8 @@ const Hero: React.FC = () => {
           className="absolute inset-0"
           animate={{ 
             background: theme === 'portfolio' 
-              ? 'linear-gradient(to right, rgba(17, 24, 39, 0.7), rgba(0, 0, 0, 0.6))' 
-              : 'linear-gradient(to right, rgba(236, 72, 153, 0.4), rgba(168, 85, 247, 0.5))'
+              ? 'linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8))' 
+              : 'linear-gradient(to bottom, rgba(236, 72, 153, 0.3), rgba(168, 85, 247, 0.4))'
           }}
           transition={themeTransition}
         ></motion.div>
@@ -155,15 +191,6 @@ const Hero: React.FC = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {/* Top decorative border */}
-            <div className="absolute top-0 left-0 right-0 h-16 bg-pink-400/30 backdrop-blur-sm z-10">
-              <div className="absolute bottom-0 left-0 right-0 h-5">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 30" preserveAspectRatio="none" className="w-full h-full fill-pink-400/30">
-                  <path d="M0,0 Q300,30 600,15 T1200,0 V30 H0 Z" />
-                </svg>
-              </div>
-            </div>
-            
             {/* Bottom decorative border */}
             <div className="absolute bottom-0 left-0 right-0 h-16 bg-pink-400/30 backdrop-blur-sm z-10">
               <div className="absolute top-0 left-0 right-0 h-5">
@@ -290,10 +317,18 @@ const Hero: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-16 md:pt-0">
+      {/* Content with mouse-follow effect */}
+      <motion.div 
+        className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center mb-24"
+        style={{ 
+          x: moveX,
+          y: moveY,
+          rotateX: rotateX,
+          rotateY: rotateY,
+          perspective: 1000
+        }}
+      >
         <motion.div
-          className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
           variants={{
             hidden: { opacity: 0, rotate: 0 },
             visible: { 
@@ -321,10 +356,12 @@ const Hero: React.FC = () => {
               variants={itemVariants}
               className={theme === 'kawaii' ? 'transform hover:scale-105 transition-transform duration-300' : ''}
             >
-              <h1 className="text-4xl md:text-6xl font-bold mb-4"
+              <h1 className="text-6xl md:text-8xl font-extrabold mb-6"
                 style={{
                   color: theme === 'kawaii' ? '#fce7f3' : 'white',
-                  textShadow: theme === 'kawaii' ? '0 0 15px rgba(236, 72, 153, 0.5)' : 'none'
+                  textShadow: theme === 'kawaii' 
+                    ? '0 0 15px rgba(236, 72, 153, 0.5)'
+                    : '0 0 20px rgba(0, 0, 0, 0.8), 0 0 40px rgba(124, 58, 237, 0.5)'
                 }}
               >
                 {content.heading}
@@ -335,30 +372,21 @@ const Hero: React.FC = () => {
               variants={itemVariants}
               className={theme === 'kawaii' ? 'transform hover:scale-105 transition-transform duration-300' : ''}
             >
-              <p className="text-xl md:text-2xl mb-6"
+              <p className="text-xl md:text-3xl mb-8"
                 style={{
                   color: theme === 'kawaii' ? '#fbcfe8' : 'rgb(209, 213, 219)',
-                  textShadow: theme === 'kawaii' ? '0 0 10px rgba(236, 72, 153, 0.3)' : 'none'
+                  textShadow: theme === 'kawaii' 
+                    ? '0 0 10px rgba(236, 72, 153, 0.3)'
+                    : '0 0 15px rgba(0, 0, 0, 0.6)'
                 }}
               >
                 {content.subheading}
               </p>
             </motion.div>
             
-            <motion.div variants={itemVariants}>
-              <p className="text-base md:text-lg mb-8 max-w-xl"
-                style={{
-                  color: theme === 'kawaii' ? 'rgba(252, 231, 243, 0.9)' : 'rgb(209, 213, 219)',
-                  textShadow: theme === 'kawaii' ? '0 0 8px rgba(236, 72, 153, 0.2)' : 'none'
-                }}
-              >
-                {content.description}
-              </p>
-            </motion.div>
-            
             <motion.div 
               variants={itemVariants}
-              className="flex flex-col sm:flex-row gap-4 mb-12"
+              className="flex flex-col sm:flex-row gap-4 mb-12 justify-center"
             >
               <Link 
                 href={content.cta.primary.link}
@@ -366,7 +394,9 @@ const Hero: React.FC = () => {
                 style={{
                   backgroundColor: theme === 'portfolio' ? '#7c3aed' : '#ec4899',
                   color: 'white',
-                  boxShadow: theme === 'kawaii' ? '0 10px 15px -3px rgba(236, 72, 153, 0.3)' : 'none'
+                  boxShadow: theme === 'kawaii' 
+                    ? '0 10px 15px -3px rgba(236, 72, 153, 0.3)'
+                    : '0 10px 25px -5px rgba(124, 58, 237, 0.5)'
                 }}
               >
                 {theme === 'kawaii' && <span className="mr-2">✨</span>}
@@ -378,7 +408,9 @@ const Hero: React.FC = () => {
                 style={{
                   border: theme === 'portfolio' ? '1px solid white' : '2px solid #f9a8d4',
                   color: theme === 'kawaii' ? '#fce7f3' : 'white',
-                  boxShadow: theme === 'kawaii' ? '0 10px 15px -3px rgba(236, 72, 153, 0.2)' : 'none'
+                  boxShadow: theme === 'kawaii' 
+                    ? '0 10px 15px -3px rgba(236, 72, 153, 0.2)'
+                    : '0 8px 20px -5px rgba(255, 255, 255, 0.2)'
                 }}
               >
                 {theme === 'kawaii' && <span className="mr-2">💖</span>}
@@ -387,21 +419,23 @@ const Hero: React.FC = () => {
             </motion.div>
             
             <motion.div variants={itemVariants}>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-4 max-w-3xl mx-auto">
                 {content.stats.map((stat, index) => (
                   <motion.div 
                     key={index} 
                     className="p-3 rounded-lg"
                     style={{
-                      backgroundColor: theme === 'kawaii' ? 'rgba(236, 72, 153, 0.2)' : 'transparent',
-                      backdropFilter: theme === 'kawaii' ? 'blur(4px)' : 'none'
+                      backgroundColor: theme === 'kawaii' 
+                        ? 'rgba(236, 72, 153, 0.2)'
+                        : 'rgba(124, 58, 237, 0.1)',
+                      backdropFilter: theme === 'kawaii' ? 'blur(4px)' : 'blur(5px)'
                     }}
                     animate={{ 
                       rotate: theme === 'kawaii' ? (index - 1) : 0 
                     }}
                     whileHover={{ 
                       rotate: 0,
-                      scale: theme === 'kawaii' ? 1.05 : 1
+                      scale: theme === 'kawaii' ? 1.05 : 1.05
                     }}
                     transition={{
                       duration: 0.3
@@ -410,7 +444,9 @@ const Hero: React.FC = () => {
                     <div className="text-2xl md:text-3xl font-bold"
                       style={{
                         color: theme === 'kawaii' ? '#fce7f3' : 'white',
-                        textShadow: theme === 'kawaii' ? '0 0 10px rgba(236, 72, 153, 0.5)' : 'none'
+                        textShadow: theme === 'kawaii' 
+                          ? '0 0 10px rgba(236, 72, 153, 0.5)'
+                          : '0 0 15px rgba(124, 58, 237, 0.6)'
                       }}
                     >
                       {stat.value}
@@ -418,7 +454,9 @@ const Hero: React.FC = () => {
                     <div className="text-sm"
                       style={{
                         color: theme === 'kawaii' ? '#fbcfe8' : 'rgb(209, 213, 219)',
-                        textShadow: theme === 'kawaii' ? '0 0 5px rgba(236, 72, 153, 0.3)' : 'none'
+                        textShadow: theme === 'kawaii' 
+                          ? '0 0 5px rgba(236, 72, 153, 0.3)'
+                          : '0 0 10px rgba(0, 0, 0, 0.5)'
                       }}
                     >
                       {theme === 'kawaii' && 
@@ -430,123 +468,8 @@ const Hero: React.FC = () => {
               </div>
             </motion.div>
           </motion.div>
-          
-          {/* Image */}
-          <motion.div 
-            variants={itemVariants}
-            className="hidden lg:block"
-          >
-            <motion.div 
-              className="relative h-[500px] w-full"
-              animate={{ rotate: theme === 'kawaii' ? 3 : 0 }}
-              transition={themeTransition}
-            >
-              <Image 
-                src={
-                  theme === 'portfolio' 
-                    ? "/media/social_post_examples_images/460439528_1567662157166822_1758686213985836233_n.jpg"
-                    : "/media/social_post_examples_images/474172572_18478867738054326_1426034679285231887_n.jpg"
-                }
-                alt="Alyssa Griffith"
-                fill
-                className="object-cover rounded-xl"
-                style={{
-                  border: theme === 'kawaii' ? '8px solid rgba(249, 168, 212, 0.8)' : 'none',
-                  boxShadow: theme === 'kawaii' 
-                    ? '0 25px 50px -12px rgba(236, 72, 153, 0.4), 0 0 15px rgba(236, 72, 153, 0.3)' 
-                    : '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
-                }}
-                sizes="(max-width: 1024px) 0vw, 600px"
-                priority
-              />
-              
-              <AnimatePresence>
-                {theme === 'kawaii' && (
-                  <>
-                    <motion.div 
-                      className="absolute -top-6 -right-5 bg-gradient-to-r from-pink-400 to-purple-400 text-white text-sm px-4 py-2 rounded-full transform rotate-12 font-medium shadow-lg"
-                      initial={{ opacity: 0, scale: 0 }}
-                      animate={{ 
-                        opacity: 1,
-                        scale: 1,
-                        rotate: [12, 15, 12, 9, 12],
-                        y: [0, -5, 0, 5, 0]
-                      }}
-                      exit={{ opacity: 0, scale: 0 }}
-                      transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    >
-                      Kawaii Mode! 🌸
-                    </motion.div>
-                    
-                    {/* Decorative stickers */}
-                    <motion.div 
-                      className="absolute bottom-5 -left-5 bg-gradient-to-r from-pink-400 to-purple-400 text-white text-xs px-3 py-1.5 rounded-full transform -rotate-12 font-medium shadow-lg"
-                      initial={{ opacity: 0, scale: 0 }}
-                      animate={{ 
-                        opacity: 1,
-                        scale: 1,
-                        rotate: [-12, -8, -12, -16, -12],
-                      }}
-                      exit={{ opacity: 0, scale: 0 }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: 0.5
-                      }}
-                    >
-                      So cute! 💕
-                    </motion.div>
-                    
-                    <motion.div 
-                      className="absolute top-1/2 -right-6 bg-gradient-to-r from-pink-400 to-purple-400 text-white text-xs px-3 py-1.5 rounded-full transform rotate-90 font-medium shadow-lg"
-                      initial={{ opacity: 0, scale: 0 }}
-                      animate={{ 
-                        opacity: 1,
-                        scale: 1,
-                        x: [0, 5, 0, -5, 0],
-                      }}
-                      exit={{ opacity: 0, scale: 0 }}
-                      transition={{
-                        duration: 2.5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: 1
-                      }}
-                    >
-                      ✨ Amazing!
-                    </motion.div>
-                    
-                    {/* New sticker */}
-                    <motion.div 
-                      className="absolute top-10 left-5 bg-gradient-to-r from-pink-400 to-purple-400 text-white text-xs px-3 py-1.5 rounded-full transform rotate-[-20deg] font-medium shadow-lg"
-                      initial={{ opacity: 0, scale: 0 }}
-                      animate={{ 
-                        opacity: 1,
-                        scale: 1,
-                        rotate: [-20, -15, -20, -25, -20],
-                      }}
-                      exit={{ opacity: 0, scale: 0 }}
-                      transition={{
-                        duration: 3.5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: 1.5
-                      }}
-                    >
-                      Subscribe! 💖
-                    </motion.div>
-                  </>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          </motion.div>
         </motion.div>
-      </div>
+      </motion.div>
       
       {/* Theme Toggle */}
       <div className="absolute bottom-10 right-10 z-20">

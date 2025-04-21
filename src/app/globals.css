@@ -29,6 +29,9 @@
   --theme-card: rgba(30, 41, 59, 0.7); /* slate-800 with opacity */
   --theme-border: rgba(148, 163, 184, 0.2); /* slate-400 with opacity */
   --theme-shadow: rgba(139, 92, 246, 0.2); /* violet-500 with opacity */
+  
+  /* Pro theme custom cursor with fallbacks */
+  cursor: url('/media/cursors/pro-cursor.svg') 7 7, url('/media/cursors/pro-cursor.png') 7 7, auto;
 }
 
 .theme-kawaii {
@@ -44,6 +47,43 @@
   --theme-card: rgba(249, 168, 212, 0.2); /* pink-300 with opacity */
   --theme-border: rgba(249, 168, 212, 0.5); /* pink-300 with opacity */
   --theme-shadow: rgba(236, 72, 153, 0.3); /* pink-500 with opacity */
+  
+  /* Kawaii theme custom cursor with fallbacks */
+  cursor: url('/media/cursors/kawaii-cursor.svg') 16 15, url('/media/cursors/kawaii-cursor.png') 16 15, auto;
+}
+
+/* Additional cursor styles for different interactions */
+.theme-portfolio a, 
+.theme-portfolio button,
+.theme-portfolio [role="button"],
+.theme-portfolio input[type="submit"],
+.theme-portfolio input[type="button"] {
+  cursor: url('/media/cursors/pro-cursor.svg') 7 7, url('/media/cursors/pro-cursor.png') 7 7, pointer;
+}
+
+.theme-kawaii a,
+.theme-kawaii button,
+.theme-kawaii [role="button"],
+.theme-kawaii input[type="submit"],
+.theme-kawaii input[type="button"] {
+  cursor: url('/media/cursors/kawaii-cursor.svg') 16 15, url('/media/cursors/kawaii-cursor.png') 16 15, pointer;
+}
+
+/* Add pointer cursor for text selection */
+.theme-portfolio input[type="text"],
+.theme-portfolio input[type="email"],
+.theme-portfolio input[type="password"],
+.theme-portfolio textarea,
+.theme-portfolio select {
+  cursor: text;
+}
+
+.theme-kawaii input[type="text"],
+.theme-kawaii input[type="email"],
+.theme-kawaii input[type="password"],
+.theme-kawaii textarea,
+.theme-kawaii select {
+  cursor: text;
 }
 
 @media (prefers-color-scheme: dark) {

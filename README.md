@@ -66,6 +66,23 @@ The application uses CSS variables to define theme-specific colors and styles:
 
 Global theme-specific styles are defined in `globals.css` and applied through theme classes.
 
+## Custom Cursors
+
+The site implements theme-specific custom cursors:
+
+- In "Pro" mode: A subtle, professional cursor with a violet color scheme
+- In "Kawaii" mode: A fun star-shaped cursor with pink color scheme
+
+The cursor files are located in:
+- `/public/media/cursors/pro-cursor.svg`
+- `/public/media/cursors/kawaii-cursor.svg`
+
+If you experience any cursor display issues, ensure the PNG fallbacks are properly generated:
+- `/public/media/cursors/pro-cursor.png`
+- `/public/media/cursors/kawaii-cursor.png`
+
+The cursor settings are defined in `src/app/globals.css` within the theme classes.
+
 ## Development
 
 This project uses:
