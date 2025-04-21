@@ -110,7 +110,7 @@ const Hero: React.FC = () => {
   
   return (
     <motion.section 
-      className="relative h-screen flex items-center justify-center overflow-hidden"
+      className="relative h-screen flex items-center justify-center overflow-hidden pt-24 lg:pt-32"
       animate={{ backgroundColor: theme === 'kawaii' ? '#fdf2f8' : '#111827' }}
       transition={themeTransition}
     >
